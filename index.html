@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Admire</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+    }
+
+    /* Navbar Styling */
+    .navbar {
+      width: 100%;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: white;
+      border-bottom: 1px solid #eee;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(162, 58, 48, 0.15);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: filter 0.3s ease;
+    }
+
+    .brand-name {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #A23A30;
+      font-family: 'Poppins', Arial, sans-serif;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #A23A30;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.3s ease, border-bottom 0.3s ease;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a:hover {
+      color: #7d2c23;
+      border-bottom: 2px solid #A23A30;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-container input {
+      padding: 0.5rem 2.5rem 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      width: 180px;
+      transition: width 0.4s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      width: 250px;
+      border-color: #A23A30;
+      box-shadow: 0 0 5px rgba(162, 58, 48, 0.5);
+    }
+
+    .search-container button {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: fill 0.3s ease;
+    }
+
+    .search-container button:hover svg {
+      fill: #7d2c23;
+    }
+
+    .search-container svg {
+      width: 18px;
+      height: 18px;
+      fill: #A23A30;
+      transition: fill 0.3s ease;
+    }
+
+    .login-btn {
+      background-color: #A23A30;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-btn:hover,
+    .login-btn:focus {
+      background-color: #7d2c23;
+      box-shadow: 0 0 8px rgba(114, 44, 26, 0.7);
+      outline: none;
+    }
+
+    .cart-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: fill 0.3s ease;
+    }
+
+    .cart-btn:hover svg,
+    .cart-btn:focus svg {
+      fill: #7d2c23;
+      outline: none;
+    }
+
+    .cart-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #A23A30;
+      transition: fill 0.3s ease;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background-color: #A23A30;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      transition: background-color 0.3s ease;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        background-color: #A23A30;
+      }
+      50% {
+        transform: scale(1.1);
+        background-color: #7d2c23;
+      }
+    }
+
+    /* Responsive Navbar */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .actions {
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .search-container input {
+        width: 100%;
+      }
+
+      .login-btn, .cart-btn {
+        width: 100%;
+      }
+    }
+
+    /* Hero Slider */
+    .hero-slider {
+      position: relative;
+      height: 90vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      z-index: 0;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 0 20px;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-primary {
+      background-color: white;
+      color: maroon;
+      padding: 0.75rem 2rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: white;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(162, 58, 48, 0.7);
+      border: none;
+      color: white;
+      font-size: 2.5rem;
+      padding: 0 15px;
+      cursor: pointer;
+      border-radius: 50%;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      z-index: 3;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: rgba(125, 44, 35, 0.9);
+    }
+
+    .prev {
+      left: 20px;
+    }
+
+    .next {
+      right: 20px;
+    }
+
+    /* Responsive Hero */
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+      }
+
+      .prev, .next {
+        font-size: 2rem;
+        padding: 0 10px;
+      }
+    }
+
+    /* Promotions Banner */
+    .promo-banner {
+      background-color: #A23A30;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .promo-content h2 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .promo-content p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .promo-content h2 {
+        font-size: 1rem;
+      }
+
+      .promo-content p {
+        font-size: 1rem;
+      }
+    }
+
+    /* Filter Section */
+.filter-section {
+  padding: 3rem 2rem;
+  background-color: #fff;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.filter-section h3 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  color: #A23A30;
+  font-weight: 700;
+}
+
+.filters {
+  display: inline-flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.filters select {
+  padding: 0.75rem 1.2rem;
+  border: 2px solid #A23A30;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  min-width: 140px;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: #7d2c23;
+  box-shadow: 0 0 8px rgba(125, 44, 35, 0.5);
+}
+
+/* Men's Collection */
+.mens-collection {
+  padding: 5rem 2rem 3rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.mens-collection h2 {
+  font-size: 2.75rem;
+  margin-bottom: 2rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #A23A30;
+}
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.clothing-card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(162, 58, 48, 0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.clothing-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(162, 58, 48, 0.3);
+}
+
+.clothing-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  border-radius: 15px 15px 0 0;
+  transition: transform 0.3s ease;
+}
+.clothing-card:hover img {
+  transform: scale(1.05);
+}
+
+.clothing-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #A23A30;
+  margin: 1rem;
+}
+
+.clothing-card p {
+  font-size: 1rem;
+  color: #555;
+  margin: 0 1rem 1rem;
+}
+
+/* Featured Products */
+.featured-products {
+  padding: 4rem 2rem;
+  background-color: #fff;
+  text-align: center;
+}
+
+.featured-products h2 {
+  font-size: 2.75rem;
+  margin-bottom: 2rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #A23A30;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.featured-grid img {
+  width: 100%;
+  height: 180px;
+  border-radius: 15px;
+  object-fit: cover;
+  box-shadow: 0 6px 15px rgba(162, 58, 48, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.featured-grid img:hover {
+  transform: scale(1.08);
+}
+
+/* Testimonials */
+.testimonials {
+  padding: 5rem 2rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: 2.75rem;
+  margin-bottom: 2.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #A23A30;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(162, 58, 48, 0.1);
+  font-style: italic;
+  position: relative;
+  color: #444;
+  transition: box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+  box-shadow: 0 12px 30px rgba(162, 58, 48, 0.2);
+}
+
+.testimonial-card p {
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+
+.testimonial-card h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #A23A30;
+  margin-top: 1rem;
+  font-style: normal;
+}
+
+.rating {
+  color: #A23A30;
+  font-size: 1.2rem;
+}
+
+/* Newsletter */
+.newsletter {
+  padding: 5rem 2rem;
+  background-color: #A23A30;
+  color: white;
+  text-align: center;
+  border-radius: 12px;
+  margin: 3rem 0;
+}
+
+.newsletter h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+
+.newsletter p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+}
+
+.newsletter form {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.newsletter input[type="email"] {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  width: 300px;
+  max-width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.newsletter input[type="email"]:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+
+.newsletter button {
+  background-color: white;
+  color: #A23A30;
+  border: none;
+  padding: 0.75rem 2.5rem;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.newsletter button:hover {
+  background-color: #7d2c23;
+  color: white;
+}
+.newsletter-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.newsletter-media {
+  flex: 1;
+  max-width: 500px;
+}
+
+.newsletter-media img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.newsletter-content {
+  flex: 1;
+  min-width: 320px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .newsletter-wrapper {
+    flex-direction: column;
+  }
+
+  .newsletter-media {
+    max-width: 100%;
+  }
+}
+/* Footer */
+.footer {
+  background-color: #222;
+  color: #eee;
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 220px;
+}
+
+.footer-section h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+  color: #A23A30;
+}
+
+.footer-links a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-contact p {
+  margin-bottom:
+0.6rem;
+font-size: 1rem;
+color: #bbb;
+}
+
+.footer-bottom {
+border-top: 1px solid #444;
+padding-top: 1rem;
+font-size: 0.9rem;
+color: #888;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+.footer-content {
+flex-direction: column;
+align-items: center;
+}
+
+.footer-section {
+text-align: center;
+}
+
+.filters {
+flex-direction: column;
+}
+
+.newsletter form {
+flex-direction: column;
+}
+
+.newsletter input[type="email"],
+.newsletter button {
+width: 100%;
+max-width: 350px;
+}
+}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="logo-container">
+      <img src="images/logo.jpg" alt="Logo" />
+      <span class="brand-name">The Admire</span>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Shop</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+
+    <div class="actions">
+      <div class="search-container">
+        <input type="text" placeholder="Search products..." />
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.13 5.59 12.53 3 9.5 3S3.87 5.59 3.87 8.39s2.6 5.39 5.63 5.39c1.61 0 3.07-.59 4.2-1.56l.27.28v.79l5 5.01L20.49 19l-5-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+      </div>
+
+      <button class="cart-btn" aria-label="View Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
+        </svg>
+        <span class="cart-badge" id="cart-count">3</span>
+      </button>
+
+      <button class="login-btn">Login</button>
+    </div>
+  </nav>
+
+  <!-- Hero Slider -->
+  <section class="hero-slider">
+    <div class="slide active" style="background-image: url('images/banner1.jpg')">
+      <div class="hero-content">
+        <h1>Step Into Style with The Admire</h1>
+        <p>Discover exclusive collections that elevate your look.</p>
+        <a href="#" class="btn-primary">Shop Now</a>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('images/banner2.jpg')">
+      <div class="hero-content">
+        <h1>New Arrivals Are Here</h1>
+        <p>Fresh styles, fresh vibes—check them out now.</p>
+        <a href="#" class="btn-primary">Shop Now</a>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('images/banner3.jpg')">
+      <div class="hero-content">
+        <h1>Exclusive Deals For You</h1>
+        <p>Save big on your favorite picks.</p>
+        <a href="#" class="btn-primary">Shop Now</a>
+      </div>
+    </div>
+    <button class="prev" aria-label="Previous Slide">❮</button>
+    <button class="next" aria-label="Next Slide">❯</button>
+  </section>
+
+  <!-- Promotions Banner -->
+  <section class="promo-banner">
+    <div class="promo-content">
+      <h2>Save 20% on Your First Order!</h2>
+      <p>Use code: ADMIRE20 at checkout</p>
+    </div>
+  </section>
+
+  <!-- Men's Clothing Section -->
+  <section class="mens-collection">
+  <h2>Men's Collection</h2>
+  <div class="collection-grid">
+    <div class="clothing-card">
+      <img src="images/shirts.jpg" alt="Shirts" />
+      <h3>Shirts</h3>
+      <p>Stylish shirts for every occasion.</p>
+      <a href="shirts.html" class="btn-primary">View</a>
+    </div>
+    <div class="clothing-card">
+      <img src="images/jackets.jpg" alt="Jackets" />
+      <h3>Jackets</h3>
+      <p>Warm and trendy jackets.</p>
+      <a href="jackets.html" class="btn-primary">View</a>
+    </div>
+    <div class="clothing-card">
+      <img src="images/hoodies.jpg" alt="Hoodies" />
+      <h3>Hoodies</h3>
+      <p>Comfortable hoodies for everyday wear.</p>
+      <a href="hoodies.html" class="btn-primary">View</a>
+    </div>
+    <div class="clothing-card">
+      <img src="images/pants.jpg" alt="Pants" />
+      <h3>Pants</h3>
+      <p>Fit and style combined.</p>
+      <a href="pants.html" class="btn-primary">View</a>
+    </div>
+    <div class="clothing-card">
+      <img src="images/shoes.jpg" alt="Shoes" />
+      <h3>Shoes</h3>
+      <p>Step up your game with our shoes.</p>
+      <a href="shoes.html" class="btn-primary">View</a>
+    </div>
+    <div class="clothing-card">
+      <img src="images/underwear.jpg" alt="Shoes" />
+      <h3>Undergarments</h3>
+      <p>Stay calm and cool</p>
+      <a href="underwear.html" class="btn-primary">View</a>
+    </div>
+    <div class="clothing-card">
+      <img src="images/socks.jpg" alt="Socks" />
+      <h3>Socks</h3>
+      <p>Step up your game with our socks.</p>
+      <a href="socks.html" class="btn-primary">View</a>
+    </div>
+  </div>
+</section>
+  <!-- Featured Products Section -->
+  <section class="featured-products">
+    <h2>Featured Products</h2>
+    <div class="collection-grid">
+      <div class="clothing-card" data-category="shirts">
+        <img src="https://www.johnstonmurphy.com/on/demandware.static/-/Sites-genesco-master/default/dwa782aff9/large/749493_master.jpg?strip=false" alt="Premium Shirt" />
+        <h3>Premium Cotton Shirt</h3>
+        <a href="#" class="btn-primary">Add to Cart</a>
+      </div>
+      <div class="clothing-card" data-category="jackets">
+        <img src="https://www.sukumart.com/images/2024/01/80064-DSC_1759-.jpg" alt="Leather Jacket" />
+        <h3>Classic Leather Jacket</h3>
+        <a href="#" class="btn-primary">Add to Cart</a>
+      </div>
+      <div class="clothing-card" data-category="hoodies">
+        <img src="https://blackthoughtsstore.com/cdn/shop/files/cozy_feelings_front.jpg?v=1691967852&width=990" alt="Cozy Hoodie" />
+        <h3>Cozy Fleece Hoodie</h3>
+        <a href="#" class="btn-primary">Add to Cart</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <p>"Amazing quality and fast shipping! The shirts fit perfectly."</p>
+        <h4>Anish Tamang</h4>
+        <div class="rating">★★★★★</div>
+      </div>
+      <div class="testimonial-card">
+        <p>"I love the jackets! Stylish and comfortable."</p>
+        <h4>Rohan Tamang</h4>
+        <div class="rating">★★★★☆</div>
+      </div>
+      <div class="testimonial-card">
+        <p>"Great customer service and awesome deals!"</p>
+        <h4>Sanish Tamang</h4>
+        <div class="rating">★★★★★</div>
+      </div>
+    </div>
+  </section>
+
+ <!-- Newsletter Section -->
+<section class="newsletter">
+  <div class="newsletter-wrapper">
+
+    <!-- Left GIF -->
+    <div class="newsletter-media">
+      <img src="https://i.gifer.com/SnJt.gif" alt="Exciting Offer" />
+    </div>
+
+    <!-- Newsletter Form Content -->
+    <div class="newsletter-content">
+      <h2>Join Our Newsletter</h2>
+      <p>Get the latest updates and exclusive offers.</p>
+      <form>
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Returns</a>
+        <a href="#">FAQ</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-contact">
+        <h3>Contact Us</h3>
+        <p>Email: support@theadmire.com</p>
+        <p>Phone: (123) 456-7890</p>
+      </div>
+      <div class="footer-social">
+        <h3>Follow Us</h3>
+        <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
+        <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
+        <a href="#"><img src="images/twitter-icon.png" alt="Twitter" /></a>
+      </div>
+    </div>
+    <p>© 2025 The Admire. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Hero Slider
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideIntervalTime = 5000;
+    let slideInterval;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+      currentIndex = index;
+    }
+
+    function nextSlide() {
+      let nextIndex = (currentIndex + 1) % totalSlides;
+      showSlide(nextIndex);
+    }
+
+    function prevSlide() {
+      let prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      showSlide(prevIndex);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetInterval();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetInterval();
+    });
+
+    function startInterval() {
+      slideInterval = setInterval(nextSlide, slideIntervalTime);
+    }
+
+    function resetInterval() {
+      clearInterval(slideInterval);
+      startInterval();
+    }
+
+    showSlide(currentIndex);
+    startInterval();
+
+    // Navbar Scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
