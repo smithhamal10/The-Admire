@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,9 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
   <link href="index.css" rel="stylesheet">
-
 </head>
 <body>
+  
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <div class="logo-container">
@@ -18,9 +19,9 @@
     </div>
 
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
-      <li><a href="Contact.html">Contact</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
 
     <div class="actions">
@@ -37,10 +38,14 @@
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
         </svg>
-        <span class="cart-badge" id="cart-count">3</span>
+        <span class="cart-badge" id="cart-count"><?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?></span>
       </button>
 
-      <button class="login-btn">Login</button>
+      <?php if (isset($_SESSION['user'])): ?>
+        <button class="login-btn" id="logout-btn">Logout</button>
+      <?php else: ?>
+        <button class="login-btn" onclick="window.location.href='login.php'">Login</button>
+      <?php endif; ?>
     </div>
   </nav>
 
@@ -79,7 +84,7 @@
     </div>
   </section>
 
-  <!-- Men's Clothing Section -->
+   <!-- Men's Clothing Section -->
   <section class="mens-collection">
   <h2>Men's Collection</h2>
   <div class="collection-grid">
@@ -127,6 +132,7 @@
     </div>
   </div>
 </section>
+
   <!-- Featured Products Section -->
   <section class="featured-products">
     <h2>Featured Products</h2>
@@ -134,17 +140,17 @@
       <div class="clothing-card" data-category="shirts">
         <img src="https://www.johnstonmurphy.com/on/demandware.static/-/Sites-genesco-master/default/dwa782aff9/large/749493_master.jpg?strip=false" alt="Premium Shirt" />
         <h3>Premium Cotton Shirt</h3>
-        <a href="#" class="btn-primary">Add to Cart</a>
+        <a href="#" class="btn-primary add-to-cart">Add to Cart</a>
       </div>
       <div class="clothing-card" data-category="jackets">
         <img src="https://www.sukumart.com/images/2024/01/80064-DSC_1759-.jpg" alt="Leather Jacket" />
         <h3>Classic Leather Jacket</h3>
-        <a href="#" class="btn-primary">Add to Cart</a>
+        <a href="#" class="btn-primary add-to-cart">Add to Cart</a>
       </div>
       <div class="clothing-card" data-category="hoodies">
         <img src="https://blackthoughtsstore.com/cdn/shop/files/cozy_feelings_front.jpg?v=1691967852&width=990" alt="Cozy Hoodie" />
         <h3>Cozy Fleece Hoodie</h3>
-        <a href="#" class="btn-primary">Add to Cart</a>
+        <a href="#" class="btn-primary add-to-cart">Add to Cart</a>
       </div>
     </div>
   </section>
@@ -169,15 +175,12 @@
     </div>
   </div>
 </section>
-
-
-
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
         <h3>Quick Links</h3>
-        <a href="index.html">Home</a>
+        <a href="index.php">Home</a>
         <a href="shop.php">shop</a>
         <a href="contact.html">Contact</a>
       </div>
@@ -195,64 +198,69 @@
     <p>© 2025 The Admire. All rights reserved.</p>
   </footer>
 
-  <script>
-    // Hero Slider
-    const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    let currentIndex = 0;
-    const totalSlides = slides.length;
-    const slideIntervalTime = 5000;
-    let slideInterval;
+<script>
+// Hero slider JS same as before
+const slides = document.querySelectorAll(".hero-slider .slide");
+const prevBtn = document.querySelector(".prev");
+const nextBtn = document.querySelector(".next");
+let currentSlide = 0;
 
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle("active", i === index);
+  });
+}
+
+prevBtn.addEventListener("click", () => {
+  currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+  showSlide(currentSlide);
+});
+
+nextBtn.addEventListener("click", () => {
+  currentSlide = (currentSlide + 1) % slides.length;
+  showSlide(currentSlide);
+});
+
+showSlide(currentSlide);
+
+// Add to Cart logic with PHP session check
+const cartCount = document.getElementById("cart-count");
+const addToCartButtons = document.querySelectorAll(".add-to-cart");
+
+// Since PHP session controls login, pass PHP login status to JS
+const isLoggedIn = <?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>;
+
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      alert('Please login to add items to your cart.');
+      return;
+    }
+
+    // Increase cart count visually
+    let count = parseInt(cartCount.textContent) || 0;
+    count++;
+    cartCount.textContent = count;
+
+    // TODO: Add AJAX call here to update cart in server session or database
+  });
+});
+
+<?php if (isset($_SESSION['user'])): ?>
+  // Logout button logic
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    fetch('logout.php', { method: 'POST' })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 'success'){
+          location.reload();
+        }
       });
-      currentIndex = index;
-    }
+  });
+<?php endif; ?>
 
-    function nextSlide() {
-      let nextIndex = (currentIndex + 1) % totalSlides;
-      showSlide(nextIndex);
-    }
+</script>
 
-    function prevSlide() {
-      let prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-      showSlide(prevIndex);
-    }
-
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      resetInterval();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      resetInterval();
-    });
-
-    function startInterval() {
-      slideInterval = setInterval(nextSlide, slideIntervalTime);
-    }
-
-    function resetInterval() {
-      clearInterval(slideInterval);
-      startInterval();
-    }
-
-    showSlide(currentIndex);
-    startInterval();
-
-    // Navbar Scroll
-    window.addEventListener('scroll', () => {
-      const navbar = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    });
-  </script>
 </body>
 </html>

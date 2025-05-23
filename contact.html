@@ -16,7 +16,7 @@
     </div>
 
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
       <li><a href="Contact.html">Contact</a></li>
     </ul>
@@ -72,5 +72,40 @@
     </div>
     <p>© 2025 The Admire. All rights reserved.</p>
   </footer>
+  <script>
+// Search Functionality
+const searchInput = document.querySelector('.search-container input[type="text"]');
+const clothingCards = document.querySelectorAll('.clothing-card');
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase();
+
+  clothingCards.forEach(card => {
+    const title = card.querySelector('h3').textContent.toLowerCase();
+    if (title.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+// Add to Cart Buttons
+const addToCartButtons = document.querySelectorAll('.clothing-card .btn-primary');
+
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', e => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      alert('Please login to add items to your cart.');
+      return;
+    }
+    // Here you can add your logic to add item to cart (e.g., API call or update cart UI)
+    // For demo, increment the cart count:
+    let count = parseInt(cartCount.textContent) || 0;
+    cartCount.textContent = count + 1;
+  });
+});
+</script>
 </body>
 </html>

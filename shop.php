@@ -1,7 +1,12 @@
 <?php
 // Start session and include DB connection
 session_start();
-include 'db_connect.php'; // replace with your actual DB connection file
+include 'db_connect.php';
+
+// Initialize cart if not already
+if (!isset($_SESSION['cart'])) {
+  $_SESSION['cart'] = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -37,22 +42,23 @@ include 'db_connect.php'; // replace with your actual DB connection file
         </button>
       </div>
 
-      <button class="cart-btn" aria-label="View Cart">
+      <a href="cart.php" class="cart-btn" aria-label="View Cart">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
         </svg>
-        <span class="cart-badge" id="cart-count">3</span>
-      </button>
+        <span class="cart-badge" id="cart-count"><?php echo count($_SESSION['cart']); ?></span>
+      </a>
 
       <button class="login-btn">Login</button>
     </div>
   </nav>
+
 <section class="product-list">
 <h2>Men's Latest Collection</h2>
   <div class="collection-grid">
     <?php
     // Fetch products from database
-    $query = "SELECT * FROM products"; // assuming 'products' table
+    $query = "SELECT * FROM products";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) > 0) {
@@ -70,12 +76,13 @@ include 'db_connect.php'; // replace with your actual DB connection file
     ?>
   </div>
 </section>
+
 <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
         <h3>Quick Links</h3>
-        <a href="index.html">Home</a>
+        <a href="index.php">Home</a>
         <a href="shop.php">shop</a>
         <a href="contact.html">Contact</a>
       </div>
@@ -92,5 +99,40 @@ include 'db_connect.php'; // replace with your actual DB connection file
     </div>
     <p>© 2025 The Admire. All rights reserved.</p>
   </footer>
+  <script>
+// Search Functionality
+const searchInput = document.querySelector('.search-container input[type="text"]');
+const clothingCards = document.querySelectorAll('.clothing-card');
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase();
+
+  clothingCards.forEach(card => {
+    const title = card.querySelector('h3').textContent.toLowerCase();
+    if (title.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+// Add to Cart Buttons
+const addToCartButtons = document.querySelectorAll('.clothing-card .btn-primary');
+
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', e => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      alert('Please login to add items to your cart.');
+      return;
+    }
+    // Here you can add your logic to add item to cart (e.g., API call or update cart UI)
+    // For demo, increment the cart count:
+    let count = parseInt(cartCount.textContent) || 0;
+    cartCount.textContent = count + 1;
+  });
+});
+</script>
 </body>
 </html>
