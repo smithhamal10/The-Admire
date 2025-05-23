@@ -1,3 +1,4 @@
+// add_to_cart.php
 <?php
 session_start();
 include 'db_connect.php';
@@ -5,19 +6,16 @@ include 'db_connect.php';
 if (isset($_GET['id'])) {
     $product_id = intval($_GET['id']);
 
-    // Fetch product from database
     $query = "SELECT * FROM products WHERE id = $product_id";
     $result = mysqli_query($conn, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
         $product = mysqli_fetch_assoc($result);
 
-        // Initialize cart if not already
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
         }
 
-        // Add or update cart item
         if (isset($_SESSION['cart'][$product_id])) {
             $_SESSION['cart'][$product_id]['quantity'] += 1;
         } else {
@@ -30,7 +28,8 @@ if (isset($_GET['id'])) {
             ];
         }
 
-        // Redirect back to shop page
+        $_SESSION['cart_count'] = array_sum(array_column($_SESSION['cart'], 'quantity'));
+
         header("Location: shop.php");
         exit();
     } else {

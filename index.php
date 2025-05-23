@@ -80,7 +80,6 @@
   <section class="promo-banner">
     <div class="promo-content">
       <h2>Save 20% on Your First Order!</h2>
-      <p>Use code: ADMIRE20 at checkout</p>
     </div>
   </section>
 
