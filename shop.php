@@ -19,8 +19,7 @@ if (!isset($_SESSION['cart'])) {
   <link rel="stylesheet" href="shop.css">
 </head>
 <body>
-<!-- Navbar -->
-  <nav class="navbar" id="navbar">
+<nav class="navbar" id="navbar">
     <div class="logo-container">
       <img src="images/logo.jpg" alt="Logo" />
       <span class="brand-name">The Admire</span>
@@ -29,10 +28,9 @@ if (!isset($_SESSION['cart'])) {
     <ul class="nav-links">
       <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
-      <li><a href="Contact.php">Contact</a></li>
+      <li><a href="contact.php">Contact</a></li>
     </ul>
-
-    <div class="actions">
+<div class="actions">
   <div class="search-container">
     <input type="text" placeholder="Search products..." />
     <button type="submit" aria-label="Search">
@@ -41,14 +39,14 @@ if (!isset($_SESSION['cart'])) {
       </svg>
     </button>
   </div>
-<a href="cart.php" class="cart-btn" aria-label="View Cart">
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
-  </svg>
-  <span class="cart-badge" id="cart-count"><?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?></span>
-</a>
 
-  </button>
+  <a href="cart.php" class="cart-btn" aria-label="View Cart">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
+    </svg>
+   <span class="cart-badge" id="cart-count"><?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?></span>
+
+  </a>
 
   <?php if (isset($_SESSION['user'])): ?>
     <button class="login-btn" id="logout-btn">Logout</button>
@@ -56,7 +54,6 @@ if (!isset($_SESSION['cart'])) {
     <button class="login-btn" onclick="window.location.href='login.php'">Login</button>
   <?php endif; ?>
 </div>
-
   </nav>
 
 <section class="product-list">
@@ -124,21 +121,6 @@ searchInput.addEventListener('input', () => {
 });
 
 // Add to Cart Buttons
-const addToCartButtons = document.querySelectorAll('.clothing-card .btn-primary');
-
-addToCartButtons.forEach(button => {
-  button.addEventListener('click', e => {
-    e.preventDefault();
-    if (!isLoggedIn) {
-      alert('Please login to add items to your cart.');
-      return;
-    }
-    // Here you can add your logic to add item to cart (e.g., API call or update cart UI)
-    // For demo, increment the cart count:
-    let count = parseInt(cartCount.textContent) || 0;
-    cartCount.textContent = count + 1;
-  });
-});
 const cartCount = document.getElementById("cart-count");
 const isLoggedIn = <?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>;
 
