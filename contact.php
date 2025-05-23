@@ -1,3 +1,14 @@
+<?php
+session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_destroy();
+    echo json_encode(['status' => 'success']);
+} else {
+    echo json_encode(['status' => 'error']);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +29,7 @@
     <ul class="nav-links">
       <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
-      <li><a href="Contact.html">Contact</a></li>
+      <li><a href="contact.php">Contact</a></li>
     </ul>
 
     <div class="actions">
@@ -35,12 +46,22 @@
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
         </svg>
-        <span class="cart-badge" id="cart-count">3</span>
+        <span class="cart-badge" id="cart-count">
+          <?php 
+            echo isset($_SESSION['cart']) ? array_sum(array_column($_SESSION['cart'], 'quantity')) : 0;
+          ?>
+        </span>
       </button>
 
-      <button class="login-btn">Login</button>
+     <?php if (isset($_SESSION['user'])): ?>
+  <button class="login-btn" id="logout-btn">Logout</button>
+<?php else: ?>
+  <button class="login-btn" onclick="window.location.href='login.php'">Login</button>
+<?php endif; ?>
+
     </div>
   </nav>
+
   <section class="contact-section">
     <h2>Contact Us</h2>
     <form action="#" method="post" class="contact-form">
@@ -50,14 +71,15 @@
       <button type="submit" class="btn-primary">Send Message</button>
     </form>
   </section>
-<!-- Footer -->
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
         <h3>Quick Links</h3>
-        <a href="index.html">Home</a>
-        <a href="shop.php">shop</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.php">Home</a>
+        <a href="shop.php">Shop</a>
+        <a href="contact.php">Contact</a>
       </div>
       <div class="footer-contact">
         <h3>Contact Us</h3>
@@ -66,46 +88,42 @@
       </div>
       <div class="footer-social">
         <h3>Follow Us</h3>
-        <a href="https://www.instagram.com/theadmire.np/"><img src="images/intagram.png" alt="intagram-icon" /></a>
+        <a href="https://www.instagram.com/theadmire.np/"><img src="images/intagram.png" alt="instagram-icon" /></a>
         <a href="#"><img src="images/tiktok-icon.png" alt="tiktok-icon" /></a>
       </div>
     </div>
     <p>© 2025 The Admire. All rights reserved.</p>
   </footer>
+
   <script>
-// Search Functionality
-const searchInput = document.querySelector('.search-container input[type="text"]');
-const clothingCards = document.querySelectorAll('.clothing-card');
+  // Search Functionality (optional)
+  const searchInput = document.querySelector('.search-container input[type="text"]');
+  const clothingCards = document.querySelectorAll('.clothing-card');
 
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.toLowerCase();
-
-  clothingCards.forEach(card => {
-    const title = card.querySelector('h3').textContent.toLowerCase();
-    if (title.includes(query)) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
-  });
+  if(searchInput){
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      clothingCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(query)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+<?php if (isset($_SESSION['user'])): ?>
+document.getElementById('logout-btn').addEventListener('click', function() {
+  fetch('logout.php', { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+      if(data.status === 'success'){
+        location.reload();
+      }
+    });
 });
-
-// Add to Cart Buttons
-const addToCartButtons = document.querySelectorAll('.clothing-card .btn-primary');
-
-addToCartButtons.forEach(button => {
-  button.addEventListener('click', e => {
-    e.preventDefault();
-    if (!isLoggedIn) {
-      alert('Please login to add items to your cart.');
-      return;
-    }
-    // Here you can add your logic to add item to cart (e.g., API call or update cart UI)
-    // For demo, increment the cart count:
-    let count = parseInt(cartCount.textContent) || 0;
-    cartCount.textContent = count + 1;
-  });
-});
+<?php endif; ?>
 </script>
 </body>
 </html>

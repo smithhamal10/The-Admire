@@ -28,6 +28,12 @@ function calculate_total($cart) {
     }
     return $total;
 }
+
+// Calculate cart count dynamically
+$cart_count = 0;
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+    $cart_count = count($_SESSION['cart']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,9 +52,9 @@ function calculate_total($cart) {
     </div>
 
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
-      <li><a href="Contact.html">Contact</a></li>
+      <li><a href="Contact.php">Contact</a></li>
     </ul>
 
     <div class="actions">
@@ -65,12 +71,13 @@ function calculate_total($cart) {
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
         </svg>
-        <span class="cart-badge" id="cart-count">3</span>
+        <span class="cart-badge" id="cart-count"><?= $cart_count ?></span>
       </button>
 
       <button class="login-btn">Login</button>
     </div>
   </nav>
+
 <div class="cart-container">
     <h2>Your Shopping Cart</h2>
     <?php if (!empty($_SESSION['cart'])): ?>
@@ -90,14 +97,13 @@ function calculate_total($cart) {
                 <?php foreach ($_SESSION['cart'] as $id => $item): ?>
                     <tr>
                         <td data-label="Image"><img src="<?= htmlspecialchars($item['image_url']) ?>" alt="" width="60"></td>
-                            <td data-label="Name"><?= htmlspecialchars($item['name']) ?></td>
-                            <td data-label="Price (Rs)"><?= htmlspecialchars($item['price']) ?></td>
-                            <td data-label="Quantity">
-                                <input type="number" name="quantities[<?= $id ?>]" value="<?= $item['quantity'] ?>" min="1">
-                            </td>
-                            <td data-label="Subtotal (Rs)"><?= $item['price'] * $item['quantity'] ?></td>
-                            <td data-label="Action"><a href="cart.php?remove=<?= $id ?>" class="remove-btn">Remove</a></td>
-
+                        <td data-label="Name"><?= htmlspecialchars($item['name']) ?></td>
+                        <td data-label="Price (Rs)"><?= htmlspecialchars($item['price']) ?></td>
+                        <td data-label="Quantity">
+                            <input type="number" name="quantities[<?= $id ?>]" value="<?= $item['quantity'] ?>" min="1">
+                        </td>
+                        <td data-label="Subtotal (Rs)"><?= $item['price'] * $item['quantity'] ?></td>
+                        <td data-label="Action"><a href="cart.php?remove=<?= $id ?>" class="remove-btn">Remove</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -113,6 +119,7 @@ function calculate_total($cart) {
         <a href="shop.php" class="shop-link">Continue Shopping</a>
     <?php endif; ?>
 </div>
+
 <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">

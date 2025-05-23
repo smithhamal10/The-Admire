@@ -1,4 +1,15 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+
+// Calculate cart count based on actual cart array in session
+$cart_count = 0;
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+    $cart_count = count($_SESSION['cart']);
+    $_SESSION['cart_count'] = $cart_count; // keep session count consistent
+} else {
+    $_SESSION['cart_count'] = 0;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,32 +32,33 @@
     <ul class="nav-links">
       <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="contact.php">Contact</a></li>
     </ul>
+<div class="actions">
+  <div class="search-container">
+    <input type="text" placeholder="Search products..." />
+    <button type="submit" aria-label="Search">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.13 5.59 12.53 3 9.5 3S3.87 5.59 3.87 8.39s2.6 5.39 5.63 5.39c1.61 0 3.07-.59 4.2-1.56l.27.28v.79l5 5.01L20.49 19l-5-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+    </button>
+  </div>
 
-    <div class="actions">
-      <div class="search-container">
-        <input type="text" placeholder="Search products..." />
-        <button type="submit" aria-label="Search">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.13 5.59 12.53 3 9.5 3S3.87 5.59 3.87 8.39s2.6 5.39 5.63 5.39c1.61 0 3.07-.59 4.2-1.56l.27.28v.79l5 5.01L20.49 19l-5-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-          </svg>
-        </button>
-      </div>
+  <a href="cart.php" class="cart-btn" aria-label="View Cart">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
+    </svg>
+   <span class="cart-badge" id="cart-count"><?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?></span>
 
-      <button class="cart-btn" aria-label="View Cart">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.83-3.17l.94-2.83h11.76l1.2 3.6H6.17zM6 4h14l-1.5 4h-11z"/>
-        </svg>
-        <span class="cart-badge" id="cart-count"><?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?></span>
-      </button>
+  </a>
 
-      <?php if (isset($_SESSION['user'])): ?>
-        <button class="login-btn" id="logout-btn">Logout</button>
-      <?php else: ?>
-        <button class="login-btn" onclick="window.location.href='login.php'">Login</button>
-      <?php endif; ?>
-    </div>
+  <?php if (isset($_SESSION['user'])): ?>
+    <button class="login-btn" id="logout-btn">Logout</button>
+  <?php else: ?>
+    <button class="login-btn" onclick="window.location.href='login.php'">Login</button>
+  <?php endif; ?>
+</div>
+
   </nav>
 
   <!-- Hero Slider -->

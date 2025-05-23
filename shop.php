@@ -27,9 +27,9 @@ if (!isset($_SESSION['cart'])) {
     </div>
 
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.php">Home</a></li>
       <li><a href="shop.php">Shop</a></li>
-      <li><a href="Contact.html">Contact</a></li>
+      <li><a href="Contact.php">Contact</a></li>
     </ul>
 
     <div class="actions">
